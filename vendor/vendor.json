@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "f+c772l+hly4ZdqJqe1dryr0398=",
+			"path": "github.com/prometheus/client_golang/prometheus",
+			"revision": "488edd04dc224ba64c401747cd0a4b5f05dfb234",
+			"revisionTime": "2016-05-31T09:15:28Z"
+		}
+	],
+	"rootPath": "es_cluster_exporter"
+}
