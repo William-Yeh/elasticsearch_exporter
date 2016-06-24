@@ -1,0 +1,9 @@
+version: '2'
+services:
+  es_cluster_exporter:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+  
+    volumes:
+     - ./dist:/dist  

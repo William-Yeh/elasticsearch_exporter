@@ -539,7 +539,7 @@ func (e *Exporter) Collect(ch chan<- prometheus.Metric) {
 
 func main() {
 	var (
-		listenAddress = flag.String("web.listen-address", ":9108", "Address to listen on for web interface and telemetry.")
+		listenAddress = flag.String("web.listen-address", ":9114", "Address to listen on for web interface and telemetry.")
 		metricsPath   = flag.String("web.telemetry-path", "/metrics", "Path under which to expose metrics.")
 		esURI         = flag.String("es.uri", "http://localhost:9200", "HTTP API address of an Elasticsearch node.")
 		esTimeout     = flag.Duration("es.timeout", 5*time.Second, "Timeout for trying to get stats from Elasticsearch.")

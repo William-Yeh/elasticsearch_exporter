@@ -1,0 +1,18 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker version
+
+    - docker build  -f Dockerfile.build  -t img   .
+
+test:
+  override:
+    - docker run -v $CIRCLE_ARTIFACTS:/dist  img
+    - $CIRCLE_ARTIFACTS/es_cluster_exporter.linux-x86_64 --help 2> result
+
+    - echo "==> Validating the test results..."
+    - sh -c "[ -s result ]"

@@ -1,0 +1,39 @@
+# building i386/x86_64 Windows/Linux/MacOSX executables via Dockerized Go compiler
+#
+# @see https://registry.hub.docker.com/_/golang/
+#
+
+# pull base image
+FROM golang:1.6.2
+MAINTAINER William Yeh <william.pjyeh@gmail.com>
+
+ENV PRJ_NAME  es_cluster_exporter
+ENV GOPATH    /opt
+WORKDIR       /opt/src/$PRJ_NAME
+
+
+# fetch imported Go lib...
+RUN go get -u -v github.com/kardianos/govendor
+COPY . /opt/src/$PRJ_NAME/
+
+# compile...
+RUN  GOOS=windows GOARCH=386   \
+     go build -o $PRJ_NAME.i386.exe
+
+RUN  GOOS=windows GOARCH=amd64 \
+     go build -o $PRJ_NAME.x86_64.exe
+
+RUN  GOOS=linux   GOARCH=386    \
+     go build -o $PRJ_NAME.linux-i386
+
+RUN  GOOS=linux   GOARCH=amd64  \
+     go build -o $PRJ_NAME.linux-x86_64
+
+RUN  GOOS=darwin  GOARCH=amd64  \
+     go build -o $PRJ_NAME.darwin-x86_64
+
+
+# copy executable
+RUN    mkdir -p /dist
+VOLUME [ "/dist" ]
+CMD    cp  $PRJ_NAME.*  /dist

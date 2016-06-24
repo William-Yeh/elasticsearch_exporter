@@ -1,13 +1,21 @@
-# Elasticsearch Cluster Exporter
+Elasticsearch Cluster Exporter
+===
+
+[![Build Status](https://travis-ci.org/William-Yeh/es_cluster_exporter.svg?branch=master)](https://travis-ci.org/William-Yeh/es_cluster_exporter) [![Circle CI](https://circleci.com/gh/William-Yeh/es_cluster_exporter.svg?style=shield)](https://circleci.com/gh/William-Yeh/es_cluster_exporter)
+
 
 Export Elasticsearch cluster-level health to Prometheus.
+
+
+
+## Usage
 
 To run it:
 
 ```bash
-go build
 ./es_cluster_exporter [flags]
 ```
+
 
 ### Flags
 
@@ -16,18 +24,34 @@ go build
 ```
 
 * __`es.uri`:__ Address (host and port) of the Elasticsearch node we should
-    connect to. This could be a local node (`localhost:8500`, for instance), or
+    connect to. This could be a local node (`localhost:9200`, for instance), or
     the address of a remote Elasticsearch server.
 * __`es.all`:__ If true, query stats for all nodes in the cluster,
     rather than just the node we connect to.
-* __`es.timeout`:__ Timeout for trying to get stats from Elasticsearch. (ex: 20s)
-* __`web.listen-address`:__ Address to listen on for web interface and telemetry.
-* __`web.telemetry-path`:__ Path under which to expose metrics.
+* __`es.timeout`:__ Timeout for trying to get stats from Elasticsearch (default: `5s`).
+* __`web.listen-address`:__ Address to listen on for web interface and telemetry (default: `":9114"`).
+* __`web.telemetry-path`:__ Path under which to expose metrics (default: `"/metrics"`).
 
 __NOTE:__ We support pulling stats for all nodes at once, but in production
 this is unlikely to be the way you actually want to run the system. It is much
 better to run an exporter on each Elasticsearch node to remove a single point
 of failure and improve the connection between operation and reporting.
+
+
+## Exported Metrics
+
+`elasticsearch_cluster_*`
+
+
+## Build
+
+Run the following command:
+
+```bash
+docker-compose up
+```
+
+Executables will be generated in the `dist` directory.
 
 
 

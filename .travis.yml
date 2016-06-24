@@ -1,8 +1,16 @@
-language: go
+sudo: true
+services:
+    - docker
 
-go:
-  - 1.6
+before_install:
+    - docker info
+    - docker version
 
-install:
-  - go get -t ./...
-  - go get github.com/prometheus/client_golang/prometheus
+    - docker build  -f Dockerfile.build  -t img   .
+
+script:
+    - docker run -v $(pwd)/dist:/dist  img
+    - $(pwd)/dist/es_cluster_exporter.linux-x86_64 --help 2> result
+
+    - echo "==> Validating the test results..."
+    - sh -c "[ -s result ]"
