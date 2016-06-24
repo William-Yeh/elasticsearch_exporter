@@ -40,7 +40,7 @@ of failure and improve the connection between operation and reporting.
 
 ## Exported Metrics
 
-`elasticsearch_cluster_*`
+`es_cluster_*`
 
 
 ## Build

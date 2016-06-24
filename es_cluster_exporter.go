@@ -16,7 +16,8 @@ import (
 )
 
 const (
-	namespace = "elasticsearch_cluster"
+	namespace = "es"
+	//namespace = "elasticsearch_cluster"
 	//namespace = "elasticsearch"
 )
 
