@@ -12,7 +12,7 @@ dependencies:
 test:
   override:
     - docker run -v $CIRCLE_ARTIFACTS:/dist  img
-    - $CIRCLE_ARTIFACTS/es_cluster_exporter.linux-x86_64 --help 2> result
+    - $CIRCLE_ARTIFACTS/es_cluster_exporter.linux-x86_64 --help 2> result  || true
 
     - echo "==> Validating the test results..."
     - sh -c "[ -s result ]"
