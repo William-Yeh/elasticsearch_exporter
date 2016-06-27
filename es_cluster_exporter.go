@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	namespace = "es"
+	namespace = "es_cluster"
 	//namespace = "elasticsearch_cluster"
 	//namespace = "elasticsearch"
 )
@@ -339,12 +339,20 @@ var (
 			help:   "Thread Pool current threads count",
 			labels: []string{"cluster", "node", "type"},
 		},
-		"cluster_nodes_total": &VecInfo{
+		"status": &VecInfo{
+			help:   "Cluster status (0=green, 1=yellow, 2=red)",
+			labels: []string{"cluster"},
+		},
+		"nodes_total": &VecInfo{
 			help:   "Total number of nodes",
 			labels: []string{"cluster"},
 		},
-		"cluster_nodes_data": &VecInfo{
+		"nodes_data": &VecInfo{
 			help:   "Number of data nodes",
+			labels: []string{"cluster"},
+		},
+		"shards_unassigned": &VecInfo{
+			help:   "Number of unassigned shards",
 			labels: []string{"cluster"},
 		},
 		"index_status": &VecInfo{
@@ -491,12 +499,15 @@ func (e *Exporter) CollectClusterHealth() {
 		return
 	}
 
-	e.gauges["cluster_nodes_total"].WithLabelValues(stats.ClusterName).Set(float64(stats.NumberOfNodes))
-	e.gauges["cluster_nodes_data"].WithLabelValues(stats.ClusterName).Set(float64(stats.NumberOfDataNodes))
+	var statusMapping = map[string]float64{"green": 0, "yellow": 1, "red": 2}
 
-	var statusMap = map[string]float64{"green": 0, "yellow": 1, "red": 2}
+	e.gauges["status"].WithLabelValues(stats.ClusterName).Set(statusMapping[stats.Status])
+	e.gauges["nodes_total"].WithLabelValues(stats.ClusterName).Set(float64(stats.NumberOfNodes))
+	e.gauges["nodes_data"].WithLabelValues(stats.ClusterName).Set(float64(stats.NumberOfDataNodes))
+	e.gauges["shards_unassigned"].WithLabelValues(stats.ClusterName).Set(float64(stats.UnassignedShards))
+
 	for indexName, indexStats := range stats.Indices {
-		e.gauges["index_status"].WithLabelValues(stats.ClusterName, indexName).Set(statusMap[indexStats.Status])
+		e.gauges["index_status"].WithLabelValues(stats.ClusterName, indexName).Set(statusMapping[indexStats.Status])
 		e.gauges["index_shards_active_primary"].WithLabelValues(stats.ClusterName, indexName).Set(float64(indexStats.ActivePrimaryShards))
 		e.gauges["index_shards_active"].WithLabelValues(stats.ClusterName, indexName).Set(float64(indexStats.ActiveShards))
 		e.gauges["index_shards_relocating"].WithLabelValues(stats.ClusterName, indexName).Set(float64(indexStats.RelocatingShards))

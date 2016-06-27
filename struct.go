@@ -1,15 +1,24 @@
+/**
+ * Payload structure for Elasticsearch Cluster Health API
+ *
+ * @see https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html
+ */
+
 package main
 
 import "encoding/json"
 
-// Elasticsearch Cluster Health Structs
+// Whole cluster status
 type ClusterHealthResponse struct {
 	ClusterName       string `json:"cluster_name"`
+	Status            string `json:"status"`
 	NumberOfNodes     int64  `json:"number_of_nodes"`
 	NumberOfDataNodes int64  `json:"number_of_data_nodes"`
+	UnassignedShards  int64  `json:"unassigned_shards"`
 	Indices           map[string]ClusterHealthIndexResponse
 }
 
+// Per index status
 type ClusterHealthIndexResponse struct {
 	Status              string `json:"status"`
 	ActivePrimaryShards int64  `json:"active_primary_shards"`
