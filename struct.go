@@ -8,6 +8,19 @@ package main
 
 import "encoding/json"
 
+// NodeIndex defines the data in the node's index page
+type NodeIndex struct {
+	NodeName    string `json:"name"`
+	ClusterName string `json:"cluster_name"`
+	Version     struct {
+		Number         string `json:"number"`
+		BuildHash      string `json:"build_hash"`
+		BuildTimestamp string `json:"build_timestamp"`
+		BuildSnapshot  bool   `json:"build_snapshot"`
+		LuceneVersion  string `json:"lucene_version"`
+	}
+}
+
 // Whole cluster status
 type ClusterHealthResponse struct {
 	ClusterName       string `json:"cluster_name"`
